@@ -1,4 +1,4 @@
-#include <elf-parser.h>
+#include "elf-parser.h"
 
 void read_elf_header64(int32_t fd, Elf64_Ehdr *elf_header)
 {
@@ -14,11 +14,16 @@ bool is_ELF64(Elf64_Ehdr eh)
 	 * Using  octal escape sequence to represent 0x7f
 	 */
 	if(!strncmp((char*)eh.e_ident, "\177ELF", 4)) {
-		printf("ELFMAGIC \t= ELF\n");
+		//printf("ELFMAGIC \t= ELF\n");
 		/* IS a ELF file */
 		return 1;
 	} else {
 		printf("ELFMAGIC mismatch!\n");
+        printf("\nFOUND INSTEAD: ");
+        for (uint32_t i = 0; i < EI_NIDENT; i++) {
+            printf("%02x ", (int)eh.e_ident[i]);
+        }
+        printf("\n");
 		/* Not ELF file */
 		return 0;
 	}
@@ -402,7 +407,8 @@ EXIT:
 void read_elf_header(int32_t fd, Elf32_Ehdr *elf_header)
 {
 	assert(elf_header != NULL);
-	assert(lseek(fd, (off_t)0, SEEK_SET) == (off_t)0);
+    off_t ls = lseek(fd, (off_t)0, SEEK_SET);
+    assert(ls == (off_t)0);
 	assert(read(fd, (void *)elf_header, sizeof(Elf32_Ehdr)) == sizeof(Elf32_Ehdr));
 }
 
@@ -413,11 +419,16 @@ bool is_ELF(Elf32_Ehdr eh)
 	 * Using  octal escape sequence to represent 0x7f
 	 */
 	if(!strncmp((char*)eh.e_ident, "\177ELF", 4)) {
-		printf("ELFMAGIC \t= ELF\n");
+		//printf("ELFMAGIC \t= ELF\n");
 		/* IS a ELF file */
 		return 1;
 	} else {
 		printf("ELFMAGIC mismatch!\n");
+        printf("\nFOUND INSTEAD: ");
+        for (uint32_t i = 0; i < EI_NIDENT; i++) {
+            printf("%02x ", (int)eh.e_ident[i]);
+        }
+        printf("\n");
 		/* Not ELF file */
 		return 0;
 	}

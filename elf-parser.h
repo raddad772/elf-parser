@@ -7,7 +7,7 @@
 #include <errno.h>
 #include <stdbool.h>
 
-#include <elf.h>
+#include "elf.h"
 
 #define DEBUG 1
 
