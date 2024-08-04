@@ -1,4 +1,4 @@
-/* This is the original elf.h file from the GNU C Library; I only removed
+/* is the original elf.h file from the GNU C Library; I only removed
    the inclusion of feature.h and added definitions of __BEGIN_DECLS and
    __END_DECLS as documented in
    https://cmd.inp.nsk.su/old/cmd2/manuals/gnudocs/gnudocs/libtool/libtool_36.html
@@ -7,7 +7,7 @@
 
    Mathias Lafeldt <mathias.lafeldt@gmail.com> */
 
-/* This file defines standard ELF types, structures, and macros.
+/* file defines standard ELF types, structures, and macros.
    Copyright (C) 1995-2003,2004,2005,2006,2007,2008,2009,2010,2011
 	Free Software Foundation, Inc.
    This file is part of the GNU C Library.
@@ -935,7 +935,7 @@ typedef struct
 
 /* Auxiliary vector.  */
 
-/* This vector is normally only used by the program interpreter.  The
+/* vector is normally only used by the program interpreter.  The
    usual definition in an ABI supplement uses the name auxv_t.  The
    vector is not usually defined in a standard <elf.h> file, but it
    can't hurt.  We rename it to avoid conflicts.  The sizes of these
@@ -990,7 +990,7 @@ typedef struct
 #define AT_HWCAP	16		/* Machine dependent hints about
 					   processor capabilities.  */
 
-/* This entry gives some information about the FPU initialization
+/* entry gives some information about the FPU initialization
    performed by the kernel.  */
 #define AT_FPUCW	18		/* Used FPU control word.  */
 
@@ -1482,7 +1482,7 @@ typedef union
   struct
     {
       Elf32_Word gt_g_value;		/* If this value were used for -G */
-      Elf32_Word gt_bytes;		/* This many bytes would be used */
+      Elf32_Word gt_bytes;		/* many bytes would be used */
     } gt_entry;				/* Subsequent entries in section */
 } Elf32_gptab;
 
@@ -2120,7 +2120,7 @@ typedef Elf32_Addr Elf32_Conflict;
 #define R_PPC_REL16_HI		251	/* half16   (sym+add-.)@h */
 #define R_PPC_REL16_HA		252	/* half16   (sym+add-.)@ha */
 
-/* This is a phony reloc to handle any old fashioned TOC16 references
+/* is a phony reloc to handle any old fashioned TOC16 references
    that may still be in object files.  */
 #define R_PPC_TOC16		255
 

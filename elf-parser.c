@@ -181,20 +181,20 @@ void print_elf_header64(Elf64_Ehdr elf_header)
 	}
 
 	/* Entry point */
-	printf("Entry point\t= 0x%08lx\n", elf_header.e_entry);
+	printf("Entry point\t= 0x%08llx\n", elf_header.e_entry);
 
 	/* ELF header size in bytes */
 	printf("ELF header size\t= 0x%08x\n", elf_header.e_ehsize);
 
 	/* Program Header */
 	printf("\nProgram Header\t= ");
-	printf("0x%08lx\n", elf_header.e_phoff);		/* start */
+	printf("0x%08llx\n", elf_header.e_phoff);		/* start */
 	printf("\t\t  %d entries\n", elf_header.e_phnum);	/* num entry */
 	printf("\t\t  %d bytes\n", elf_header.e_phentsize);	/* size/entry */
 
 	/* Section header starts at */
 	printf("\nSection Header\t= ");
-	printf("0x%08lx\n", elf_header.e_shoff);		/* start */
+	printf("0x%08llx\n", elf_header.e_shoff);		/* start */
 	printf("\t\t  %d entries\n", elf_header.e_shnum);	/* num entry */
 	printf("\t\t  %d bytes\n", elf_header.e_shentsize);	/* size/entry */
 	printf("\t\t  0x%08x (string table offset)\n", elf_header.e_shstrndx);
@@ -272,7 +272,7 @@ char * read_section64(int32_t fd, Elf64_Shdr sh)
 {
 	char* buff = malloc(sh.sh_size);
 	if(!buff) {
-		printf("%s:Failed to allocate %ldbytes\n",
+		printf("%s:Failed to allocate %lldbytes\n",
 				__func__, sh.sh_size);
 	}
 
@@ -301,11 +301,11 @@ void print_section_headers64(int32_t fd, Elf64_Ehdr eh, Elf64_Shdr sh_table[])
 
 	for(i=0; i<eh.e_shnum; i++) {
 		printf(" %03d ", i);
-		printf("0x%08lx ", sh_table[i].sh_offset);
-		printf("0x%08lx ", sh_table[i].sh_addr);
-		printf("0x%08lx ", sh_table[i].sh_size);
-		printf("%4ld ", sh_table[i].sh_addralign);
-		printf("0x%08lx ", sh_table[i].sh_flags);
+		printf("0x%08llx ", sh_table[i].sh_offset);
+		printf("0x%08llx ", sh_table[i].sh_addr);
+		printf("0x%08llx ", sh_table[i].sh_size);
+		printf("%4lld ", sh_table[i].sh_addralign);
+		printf("0x%08llx ", sh_table[i].sh_flags);
 		printf("0x%08x ", sh_table[i].sh_type);
 		printf("%s\t", (sh_str + sh_table[i].sh_name));
 		printf("\n");
@@ -339,7 +339,7 @@ void print_symbol_table64(int32_t fd,
 	printf("%d symbols\n", symbol_count);
 
 	for(i=0; i< symbol_count; i++) {
-		printf("0x%08lx ", sym_tbl[i].st_value);
+		printf("0x%08llx ", sym_tbl[i].st_value);
 		printf("0x%02x ", ELF32_ST_BIND(sym_tbl[i].st_info));
 		printf("0x%02x ", ELF32_ST_TYPE(sym_tbl[i].st_info));
 		printf("%s\n", (str_tbl + sym_tbl[i].st_name));
@@ -380,8 +380,8 @@ void save_text_section64(int32_t fd, Elf64_Ehdr eh, Elf64_Shdr sh_table[])
 	for(i=0; i<eh.e_shnum; i++) {
 		if(!strcmp(".text", (sh_str + sh_table[i].sh_name))) {
 			printf("Found section\t\".text\"\n");
-			printf("at offset\t0x%08lx\n", sh_table[i].sh_offset);
-			printf("of size\t\t0x%08lx\n", sh_table[i].sh_size);
+			printf("at offset\t0x%08llx\n", sh_table[i].sh_offset);
+			printf("of size\t\t0x%08llx\n", sh_table[i].sh_size);
 
 			break;
 		}
@@ -390,18 +390,17 @@ void save_text_section64(int32_t fd, Elf64_Ehdr eh, Elf64_Shdr sh_table[])
 	assert(lseek(fd, sh_table[i].sh_offset, SEEK_SET)==sh_table[i].sh_offset);
 	buf = malloc(sh_table[i].sh_size);
 	if(!buf) {
-		printf("Failed to allocate %ldbytes!!\n", sh_table[i].sh_size);
-		goto EXIT;
+		printf("Failed to allocate %lldbytes!!\n", sh_table[i].sh_size);
+		goto EXIT_postfd2;
 	}
 	assert(read(fd, buf, sh_table[i].sh_size)==sh_table[i].sh_size);
 	fd2 = open(pwd, O_RDWR|O_SYNC|O_CREAT, 0644);
 	write(fd2, buf, sh_table[i].sh_size);
 	fsync(fd2);
 
-EXIT:
 	close(fd2);
+EXIT_postfd2:
 	free(pwd);
-
 }
 
 void read_elf_header(int32_t fd, Elf32_Ehdr *elf_header)
@@ -801,8 +800,8 @@ void save_text_section(int32_t fd, Elf32_Ehdr eh, Elf32_Shdr sh_table[])
 	write(fd2, buf, sh_table[i].sh_size);
 	fsync(fd2);
 
-EXIT:
 	close(fd2);
+    EXIT:
 	free(pwd);
 
 }
